@@ -68,7 +68,11 @@ export default store => next => action => {
         data
     }));
 
-    let requestURL = 'http://localhost:9527' + opts.url;
+    // TODO 开发模式下暂时写死端口
+    let requestURL = opts.url;
+    if (process.env.NODE_ENV !== 'production') {
+        requestURL = 'http://localhost:9527' + requestURL;
+    }
 
     // 发送 ajax 请求
     return request(opts.type, requestURL)
