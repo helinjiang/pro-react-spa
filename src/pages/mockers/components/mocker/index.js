@@ -8,7 +8,7 @@ import MockerBreadcrumb from './display-breadcrumb';
 import MockerDetail from './display-detail';
 import MockerShowResult from './display-show-result';
 import MockerSwitcher from './display-action';
-import MockerMockModuleList from './display-mock-module-list';
+import MockModuleList from './display-mock-module-list';
 import MockerReadme from './display-readme';
 
 import './index.less';
@@ -195,12 +195,12 @@ class Mocker extends Component {
                                 onShowResult={this.handleShowResult}
                             />
 
-                            {/*<MockerMockModuleList*/}
-                                {/*isLoaded={isLoaded}*/}
-                                {/*mockerItem={mockerItem}*/}
-                                {/*onShowResult={this.handleShowResult}*/}
-                                {/*updateActive={this.handleActive}*/}
-                            {/*/>*/}
+                            <MockModuleList
+                                isLoaded={isLoaded}
+                                mockerItem={mockerItem}
+                                onShowResult={this.handleShowResult}
+                                updateActive={this.handleActive}
+                            />
 
                             {/*<MockerShowResult*/}
                                 {/*isShow={showModal}*/}
