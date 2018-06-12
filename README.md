@@ -4,6 +4,7 @@ Single page by React
 
 - https://github.com/facebook/create-react-app
 - https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-a-router
+- https://ant.design/docs/react/use-with-create-react-app-cn
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
