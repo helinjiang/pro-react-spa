@@ -97,6 +97,7 @@ class Mocker extends Component {
             <div>
               <MockerSwitcher
                 isDisabled={mockerItem.config.disable}
+                activeModule={mockerItem.config.activeModule}
                 previewResult={this.handlePreviewResult.bind(this, null)}
                 updateDisable={this.handleDisable}
               />
