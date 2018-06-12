@@ -1,107 +1,37 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import _ from 'lodash';
+import React from 'react';
+import { Link, Route } from 'react-router-dom';
 
-import { Button } from 'antd';
-
-import { loadMockerList } from './data/data-mocker-list';
-import MockerListItem from './components/mocker-list-item';
+import List from './components/list'
+import Mocker from './components/mocker'
 
 import './index.less';
 
-class Mockers extends Component {
-    constructor(props, context) {
-        super(props, context);
+export default function MockersContainer(props) {
+    let { match } = props;
 
-        this.state = {
-            curTag: '全部'
-        };
-    }
+    return (
+        <div className="mockers">
+            <h2>Topics</h2>
+            <ul>
+                <li>
+                    <Link to={`${match.url}/rendering`}>Rendering with React</Link>
+                </li>
+                <li>
+                    <Link to={`${match.url}/components`}>Components</Link>
+                </li>
+                <li>
+                    <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
+                </li>
+            </ul>
 
-    componentDidMount() {
-        this.props.loadMockerList();
-    }
+            <Route path={`${match.url}/:mockerName`} component={Mocker} />
+            <Route
+                exact
+                path={match.url}
+                render={() => <h3>Please select a topic.</h3>}
+            />
+        </div>
+    );
 
-    getAllTags() {
-        const { list } = this.props;
-
-        let arr = [];
-
-        list.forEach((item) => {
-            arr = arr.concat(item.config.tags);
-        });
-
-        return _.uniq(arr);
-    }
-
-    getFilterList() {
-        const { curTag } = this.state;
-        const { list } = this.props;
-
-        return list.filter(item => item.config.tags.indexOf(curTag) > -1);
-    }
-
-    handleClickTag(tagName) {
-        this.setState({
-            curTag: tagName
-        });
-    }
-
-    render() {
-        const { curTag } = this.state;
-
-        const tagList = this.getAllTags();
-        const filterList = this.getFilterList();
-
-        return (
-            <div className="mockers">
-                <div className="tag-wrapper">
-                    <Button.Group>
-                        {
-                            tagList.map((tagName, tagIndex) => {
-                                return <Button
-                                    key={tagIndex}
-                                    className={tagName === curTag ? 'active' : ''}
-                                    icon="tag"
-                                    onClick={this.handleClickTag.bind(this, tagName)}>{tagName}</Button>;
-                            })
-                        }
-                    </Button.Group>
-                </div>
-                <div className="list-wrapper">
-                    {
-                        filterList.map((item, index) => {
-                            return (
-                                <MockerListItem key={index}
-                                                index={index}
-                                                mockerItem={item}
-                                                clickTag={this.handleClickTag}
-                                />
-                            );
-                        })
-                    }
-                </div>
-            </div>
-        );
-    }
 }
 
-function mapStateToProps(state) {
-    const { mockerListInfo } = state;
-
-    return {
-        isLoaded: mockerListInfo.isLoaded,
-        list: mockerListInfo.list
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        loadMockerList() {
-            return dispatch(loadMockerList());
-        }
-
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Mockers);
