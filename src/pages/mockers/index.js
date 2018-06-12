@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { loadRecommend } from '../../datas/now-data-balance';
 
 import './index.less';
 
-export default class Topics extends Component {
+class Mockers extends Component {
     constructor(props, context) {
         super(props, context);
+    }
+
+    componentDidMount() {
+        this.props.loadRecommend();
     }
 
     render() {
@@ -42,3 +49,22 @@ const Topic = ({ match }) => (
         <h3>{match.params.topicId}</h3>
     </div>
 );
+
+function mapStateToProps(state) {
+    const { recommendInfo } = state;
+
+    return {
+        recommendInfo: recommendInfo
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        loadRecommend() {
+            return dispatch(loadRecommend());
+        }
+
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Mockers);
