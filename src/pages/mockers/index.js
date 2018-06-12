@@ -11,19 +11,6 @@ export default function MockersContainer(props) {
 
     return (
         <div className="page-mockers">
-            <h2>Topics</h2>
-            <ul>
-                <li>
-                    <Link to={`${match.url}/rendering`}>Rendering with React</Link>
-                </li>
-                <li>
-                    <Link to={`${match.url}/components`}>Components</Link>
-                </li>
-                <li>
-                    <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
-                </li>
-            </ul>
-
             <Route path={`${match.url}/:mockerName`} component={Mocker} />
             <Route
                 exact

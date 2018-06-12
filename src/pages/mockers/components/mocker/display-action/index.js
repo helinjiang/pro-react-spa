@@ -4,7 +4,7 @@ import { Alert, Button } from 'antd';
 import './index.less';
 
 export default function MockerSwitcher(props) {
-    const { isDisabled, updateDisable } = props;
+    const { isDisabled, previewResult, updateDisable } = props;
 
     return (
         <div className="mocker-action">
@@ -24,7 +24,7 @@ export default function MockerSwitcher(props) {
                 )
             }
 
-            <Button type="primary" disabled={isDisabled ? 'disable' : ''} icon="profile">
+            <Button type="primary" disabled={isDisabled ? 'disable' : ''} icon="profile" onClick={previewResult}>
                 预览结果
             </Button>
 

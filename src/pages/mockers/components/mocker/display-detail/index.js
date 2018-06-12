@@ -29,14 +29,16 @@ export default function MockerDetail(props) {
 
                 <Col span={12}>
                     <table>
-                        <tr>
-                            <td style={{ width: '100px' }}>配置的路由:</td>
-                            <td>{mockerItem.config.route}</td>
-                        </tr>
-                        <tr>
-                            <td>已激活数据:</td>
-                            <td>{mockerItem.config.activeModule}</td>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '100px' }}>配置的路由:</td>
+                                <td>{mockerItem.config.route}</td>
+                            </tr>
+                            <tr>
+                                <td>已激活数据:</td>
+                                <td>{mockerItem.config.activeModule}</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </Col>
             </Row>

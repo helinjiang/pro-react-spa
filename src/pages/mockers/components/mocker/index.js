@@ -9,7 +9,6 @@ import MockerDetail from './display-detail';
 import MockerShowResult from './display-show-result';
 import MockerSwitcher from './display-action';
 import MockModuleList from './display-mock-module-list';
-import MockerReadme from './display-readme';
 
 import './index.less';
 
@@ -68,7 +67,7 @@ class Mocker extends Component {
             superagent.post(url)
                 .set('Content-Type', 'application/json')
                 .send(data)
-                .withCredentials()
+                // .withCredentials()
                 .end((err, res) => {
                     if (err) {
                         return reject(err);
@@ -83,7 +82,7 @@ class Mocker extends Component {
         return new Promise((resolve, reject) => {
             superagent.get(url)
                 .query(data)
-                .withCredentials()
+                // .withCredentials()
                 .end((err, res) => {
                     if (err) {
                         return reject(err);
@@ -93,6 +92,50 @@ class Mocker extends Component {
                 });
         });
     }
+
+    handlePreviewResult = (query, host) => {
+        console.log('--handlePreviewResult--');
+        const { mockerItem } = this.props;
+
+        let actualURL = mockerItem.config.route;
+
+        if (process.env.NODE_ENV !== 'production') {
+            host = 'localhost:9527';
+        }
+
+        // 如果有指定的host，则使用指定的host
+        if (host && (actualURL.indexOf(host) < 0)) {
+            actualURL = `http://${host}${actualURL}`;
+        }
+
+        console.log('--handlePreviewResult actualURL--', actualURL, query, host);
+
+        if (mockerItem.config.method === 'post') {
+            this.getMockModuleByPost(actualURL, query)
+                .then((data) => {
+                    console.log(data);
+                    this.setState({
+                        showModal: true,
+                        modalShowData: data
+                    });
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        } else {
+            this.getMockModuleByGet(actualURL, query)
+                .then((data) => {
+                    console.log(data);
+                    this.setState({
+                        showModal: true,
+                        modalShowData: data
+                    });
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        }
+    };
 
     handleActive(name) {
         this.props.setMockerActiveModule(this.props.mockerItem.name, name);
@@ -159,7 +202,7 @@ class Mocker extends Component {
     }
 
     getActualURL(mockerItem, cgiParams) {
-        let curUrl = mockerItem.route;
+        let curUrl = mockerItem.config.route;
 
         if (Object.keys(cgiParams).length) {
             Object.keys(cgiParams).forEach((key) => {
@@ -185,6 +228,7 @@ class Mocker extends Component {
                         <div>
                             <MockerSwitcher
                                 isDisabled={mockerItem.disable}
+                                previewResult={this.handlePreviewResult.bind(this, null)}
                                 updateDisable={this.handleDisable}
                             />
 
@@ -202,11 +246,11 @@ class Mocker extends Component {
                                 updateActive={this.handleActive}
                             />
 
-                            {/*<MockerShowResult*/}
-                                {/*isShow={showModal}*/}
-                                {/*data={modalShowData}*/}
-                                {/*onHide={this.handleModalHide}*/}
-                            {/*/>*/}
+                            <MockerShowResult
+                                isShow={showModal}
+                                data={modalShowData}
+                                onHide={this.handleModalHide}
+                            />
 
                             {/*<MockerReadme htmlContent={readme} />*/}
 
