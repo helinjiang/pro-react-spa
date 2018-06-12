@@ -16,9 +16,9 @@ function fetchMocker(mockerName) {
   return {
     [CALL_API]: {
       types: [MOCKER_REQUEST, MOCKER_REQUEST_SUCCESS, MOCKER_REQUEST_FAIL],
-      url: `/matman-cgi/mocker/${mockerName}`,
-    },
-  }
+      url: `/matman-cgi/mocker/${mockerName}`
+    }
+  };
 }
 
 export function loadMocker(mockerName) {
@@ -31,9 +31,9 @@ function fetchMockerReadme(mockerName) {
   return {
     [CALL_API]: {
       types: [MOCKER_README_REQUEST, MOCKER_README_REQUEST_SUCCESS, MOCKER_README_REQUEST_FAIL],
-      url: `/sys-cgi/mocker/${mockerName}/readme`,
-    },
-  }
+      url: `/matman-cgi/mocker/${mockerName}/readme`
+    }
+  };
 }
 
 export function loadMockerReadme(mockerName) {
@@ -46,17 +46,19 @@ function requestUpdateMocker(mockerName, newMockerState) {
   return {
     [CALL_API]: {
       types: [SET_ACTIVE_MODULE_REQUEST, SET_ACTIVE_MODULE_REQUEST_SUCCESS, SET_ACTIVE_MODULE_REQUEST_FAIL],
-      url: `/sys-cgi/mocker/${mockerName}`,
+      url: `/matman-cgi/mocker/${mockerName}`,
       type: 'POST',
       data: newMockerState
-    },
-  }
+    }
+  };
 }
 
 export function setMockerActiveModule(mockerName, mockModuleName) {
   return (dispatch, getState) => {
     return dispatch(requestUpdateMocker(mockerName, {
-      activeModule: mockModuleName,
+      config: {
+        activeModule: mockModuleName
+      }
     }));
   };
 }
@@ -64,7 +66,9 @@ export function setMockerActiveModule(mockerName, mockModuleName) {
 export function setMockerDisable(mockerName, value) {
   return (dispatch, getState) => {
     return dispatch(requestUpdateMocker(mockerName, {
-      disable: value,
+      config: {
+        disable: value
+      }
     }));
   };
 }
