@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import superagent from 'superagent';
+
+import { ajax } from '../../../../business/db';
 
 import { loadMocker, loadMockerReadme, setMockerActiveModule, setMockerDisable } from '../../data/data-mocker';
 
@@ -25,8 +26,6 @@ class Mocker extends Component {
 
         this.handleActive = this.handleActive.bind(this);
         this.handleModalHide = this.handleModalHide.bind(this);
-        this.handleShowResult = this.handleShowResult.bind(this);
-        this.handleParamsChange = this.handleParamsChange.bind(this);
         this.handleDisable = this.handleDisable.bind(this);
     }
 
@@ -62,39 +61,7 @@ class Mocker extends Component {
         // this.props.loadMockerReadme(mockerName);
     }
 
-    getMockModuleByPost(url, data) {
-        return new Promise((resolve, reject) => {
-            superagent.post(url)
-                .set('Content-Type', 'application/json')
-                .send(data)
-                // .withCredentials()
-                .end((err, res) => {
-                    if (err) {
-                        return reject(err);
-                    }
-
-                    resolve(res.body);
-                });
-        });
-    }
-
-    getMockModuleByGet(url, data) {
-        return new Promise((resolve, reject) => {
-            superagent.get(url)
-                .query(data)
-                // .withCredentials()
-                .end((err, res) => {
-                    if (err) {
-                        return reject(err);
-                    }
-
-                    resolve(res.body);
-                });
-        });
-    }
-
     handlePreviewResult = (query, host) => {
-        console.log('--handlePreviewResult--');
         const { mockerItem } = this.props;
 
         let actualURL = mockerItem.config.route;
@@ -110,96 +77,38 @@ class Mocker extends Component {
 
         console.log('--handlePreviewResult actualURL--', actualURL, query, host);
 
-        if (mockerItem.config.method === 'post') {
-            this.getMockModuleByPost(actualURL, query)
-                .then((data) => {
-                    console.log(data);
-                    this.setState({
-                        showModal: true,
-                        modalShowData: data
-                    });
-                })
-                .catch((err) => {
-                    console.error(err);
+        ajax({
+            method: mockerItem.config.method,
+            url: actualURL,
+            data: query
+        })
+            .then((data) => {
+                console.log(data);
+                this.setState({
+                    showModal: true,
+                    modalShowData: data
                 });
-        } else {
-            this.getMockModuleByGet(actualURL, query)
-                .then((data) => {
-                    console.log(data);
-                    this.setState({
-                        showModal: true,
-                        modalShowData: data
-                    });
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     };
 
-    handleActive(name) {
+    handleActive = (name) => {
         this.props.setMockerActiveModule(this.props.mockerItem.name, name);
-    }
+    };
 
-    handleModalHide() {
+    handleModalHide = () => {
         this.setState({
             showModal: false,
             modalShowData: {}
         });
-    }
+    };
 
-    handleShowResult(query = {}, host) {
-        const { mockerItem } = this.props;
-        let { actualURL } = this.state;
-
-        // 如果有指定的host，则使用指定的host
-        if (host && (actualURL.indexOf(host) < 0)) {
-            actualURL = `http://${host}${actualURL}`;
-        }
-
-        if (mockerItem.method === 'post') {
-            this.getMockModuleByPost(actualURL, query)
-                .then((data) => {
-                    console.log(data);
-                    this.setState({
-                        showModal: true,
-                        modalShowData: data
-                    });
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        } else {
-            this.getMockModuleByGet(actualURL, query)
-                .then((data) => {
-                    console.log(data);
-                    this.setState({
-                        showModal: true,
-                        modalShowData: data
-                    });
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-        }
-    }
-
-    handleParamsChange(fieldName, event) {
-        let { mockerItem } = this.props;
-        let { cgiParams } = this.state;
-
-        cgiParams[fieldName] = event.target.value;
-
-        this.setState({
-            cgiParams: cgiParams,
-            actualURL: this.getActualURL(mockerItem, cgiParams)
-        });
-    }
-
-    handleDisable() {
+    handleDisable = () => {
         // console.log('handleDisable', this.props.mockerItem.disable);
         this.props.setMockerDisable(this.props.mockerItem.name, !this.props.mockerItem.disable);
-    }
+    };
 
     getActualURL(mockerItem, cgiParams) {
         let curUrl = mockerItem.config.route;
@@ -234,15 +143,12 @@ class Mocker extends Component {
 
                             <MockerDetail
                                 mockerItem={mockerItem}
-                                actualURL={actualURL}
-                                onParamsChange={this.handleParamsChange}
-                                onShowResult={this.handleShowResult}
                             />
 
                             <MockModuleList
                                 isLoaded={isLoaded}
                                 mockerItem={mockerItem}
-                                onShowResult={this.handleShowResult}
+                                previewResult={this.handlePreviewResult}
                                 updateActive={this.handleActive}
                             />
 

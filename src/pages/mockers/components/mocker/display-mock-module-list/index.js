@@ -4,7 +4,7 @@ import { Button, Table } from 'antd';
 import './index.less';
 
 export default function MockerMockModuleList(props) {
-    const { isLoaded, mockerItem, onShowResult, updateActive } = props;
+    const { isLoaded, mockerItem, previewResult, updateActive } = props;
 
     const activeModule = mockerItem.config.activeModule || '';
     const mockModuleList = mockerItem.mockModuleList || [];
@@ -32,7 +32,7 @@ export default function MockerMockModuleList(props) {
                 <Button
                     type="primary"
                     disabled={mockerItem.config.disable ? 'disable' : ''}
-                    onClick={onShowResult.bind(this, record.query, record.host)}
+                    onClick={previewResult.bind(this, record.config.query)}
                 >
                     预览结果
                 </Button>
