@@ -5,8 +5,6 @@ import createStore from './store';
 
 import App from './App';
 
-import './index.css';
-
 const store = createStore(window.__initialState);
 
 function mapStateToProps(state) {
