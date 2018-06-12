@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux';
 
-import { recommendInfo } from '../datas/now-data-balance';
+import { mockerInfo } from '../pages/mockers/data/data-mocker';
+import { mockerListInfo } from '../pages/mockers/data/data-mocker-list';
 
 const rootReducer = combineReducers({
-    'default': () => ({}),
-    recommendInfo: recommendInfo
+    mockerInfo: mockerInfo,
+    mockerListInfo: mockerListInfo
 });
 
 export default rootReducer;
