@@ -10,35 +10,35 @@ export default function MockerMockModuleList(props) {
     const mockModuleList = mockerItem.mockModuleList || [];
 
     const tableColumns = [{
-        title: 'Name',
+        title: '数据模型名称',
         dataIndex: 'name',
-        key: 'name',
+        key: 'name'
+    }, {
+        title: '描述',
+        dataIndex: 'description',
+        key: 'description',
         render: (text, record) => (
-            <Button
-                type="primary"
-                disabled={mockerItem.config.disable ? 'disable' : ''}
-                onClick={onShowResult.bind(this, record.query, record.host)}
-            >
-                {text}
-            </Button>
+            <div>
+                {record.config.version ? 'V' + record.config.version : ''}
+                {record.config.author ? ' by' + record.config.author : ''}
+                {record.config.description}
+            </div>
         )
     }, {
-        title: 'Version',
-        dataIndex: 'version',
-        key: 'version'
-    }, {
-        title: 'Author',
-        dataIndex: 'author',
-        key: 'author'
-    }, {
-        title: 'Description',
-        dataIndex: 'description',
-        key: 'description'
-    }, {
-        title: 'Action',
+        title: '操作',
         key: 'action',
         render: (text, record) => (
             <div>
+                <Button
+                    type="primary"
+                    disabled={mockerItem.config.disable ? 'disable' : ''}
+                    onClick={onShowResult.bind(this, record.query, record.host)}
+                >
+                    预览结果
+                </Button>
+
+                <span className="ant-divider" />
+
                 {
                     (record.name !== activeModule) ?
                         <Button
@@ -46,22 +46,21 @@ export default function MockerMockModuleList(props) {
                             disabled={mockerItem.config.disable ? 'disable' : ''}
                             onClick={updateActive.bind(this, record.name)}
                         >
-                            Active It
+                            激活
                         </Button>
-                        : <span>Aready active</span>
+                        : <Button
+                            type="primary"
+                            disabled={'disable'}
+                        >
+                            已激活
+                        </Button>
                 }
-
-                <span className="ant-divider" />
-                <Button disabled> 编辑 </Button>
-
-                <span className="ant-divider" />
-                <Button disabled> 删除 </Button>
             </div>
         )
     }];
 
     return (
-        <div className="mocker-mock-module-list">
+        <div className="mock-module-list">
 
             < Table loading={!isLoaded} rowKey="name" columns={tableColumns} dataSource={mockModuleList} />
 
