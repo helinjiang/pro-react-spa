@@ -19,36 +19,8 @@ class Mocker extends Component {
 
         this.state = {
             showModal: false,
-            modalShowData: {},
-            cgiParams: {},
-            actualURL: ''
+            modalShowData: {}
         };
-
-        this.handleActive = this.handleActive.bind(this);
-        this.handleModalHide = this.handleModalHide.bind(this);
-        this.handleDisable = this.handleDisable.bind(this);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.isLoaded && (this.props.isLoaded !== nextProps.isLoaded)) {
-            // 加载完 mocker 信息之后，要初始化填写的参数
-            const { mockerItem } = nextProps;
-            let mockerParams = mockerItem.params || [];
-            let { cgiParams } = this.state;
-
-            if (mockerParams.length) {
-                mockerParams.forEach((item) => {
-                    if (item.defaultValue) {
-                        cgiParams[item.name] = item.defaultValue;
-                    }
-                });
-            }
-
-            this.setState({
-                cgiParams: cgiParams,
-                actualURL: this.getActualURL(mockerItem, cgiParams)
-            });
-        }
     }
 
     componentDidMount() {
@@ -75,19 +47,17 @@ class Mocker extends Component {
             actualURL = `http://${host}${actualURL}`;
         }
 
-        console.log('--handlePreviewResult actualURL--', actualURL, query, host);
-
         ajax({
             method: mockerItem.config.method,
             url: actualURL,
             data: query
         })
             .then((data) => {
-                console.log(data);
-                this.setState({
-                    showModal: true,
-                    modalShowData: data
-                });
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log(`url=${actualURL}`, query, data);
+                }
+
+                this.handleModalShow(data);
             })
             .catch((err) => {
                 console.error(err);
@@ -96,6 +66,13 @@ class Mocker extends Component {
 
     handleActive = (name) => {
         this.props.setMockerActiveModule(this.props.mockerItem.name, name);
+    };
+
+    handleModalShow = (data) => {
+        this.setState({
+            showModal: true,
+            modalShowData: data
+        });
     };
 
     handleModalHide = () => {
@@ -110,22 +87,9 @@ class Mocker extends Component {
         this.props.setMockerDisable(this.props.mockerItem.name, !this.props.mockerItem.disable);
     };
 
-    getActualURL(mockerItem, cgiParams) {
-        let curUrl = mockerItem.config.route;
-
-        if (Object.keys(cgiParams).length) {
-            Object.keys(cgiParams).forEach((key) => {
-                curUrl = curUrl.replace(':' + key, cgiParams[key]);
-            });
-        }
-
-        console.log('curUrl', curUrl);
-        return curUrl;
-    }
-
     render() {
         const { isLoaded, mockerItem, readme } = this.props;
-        const { showModal, modalShowData, actualURL } = this.state;
+        const { showModal, modalShowData } = this.state;
 
         return (
             <div className="mockers-mocker">
