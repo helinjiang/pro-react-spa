@@ -14,150 +14,149 @@ import MockModuleList from './display-mock-module-list';
 import './index.less';
 
 class Mocker extends Component {
-    constructor(props, context) {
-        super(props, context);
+  constructor(props, context) {
+    super(props, context);
 
-        this.state = {
-            modalShowData: null
-        };
+    this.state = {
+      modalShowData: null
+    };
+  }
+
+  componentDidMount() {
+    console.log('Mocker componentDidMount', this.props);
+
+    let { mockerName } = this.props.match.params;
+
+    // 加载这个 mocker 的信息
+    this.props.loadMocker(mockerName);
+    // this.props.loadMockerReadme(mockerName);
+  }
+
+  handlePreviewResult = (query, host) => {
+    const { mockerItem } = this.props;
+
+    let actualURL = mockerItem.config.route;
+
+    if (process.env.NODE_ENV !== 'production') {
+      host = 'localhost:9527';
     }
 
-    componentDidMount() {
-        console.log('Mocker componentDidMount', this.props);
-
-        let { mockerName } = this.props.match.params;
-
-        // 加载这个 mocker 的信息
-        this.props.loadMocker(mockerName);
-        // this.props.loadMockerReadme(mockerName);
+    // 如果有指定的host，则使用指定的host
+    if (host && (actualURL.indexOf(host) < 0)) {
+      actualURL = `http://${host}${actualURL}`;
     }
 
-    handlePreviewResult = (query, host) => {
-        const { mockerItem } = this.props;
-
-        let actualURL = mockerItem.config.route;
-
+    ajax({
+      method: mockerItem.config.method,
+      url: actualURL,
+      data: query
+    })
+      .then((data) => {
         if (process.env.NODE_ENV !== 'production') {
-            host = 'localhost:9527';
+          console.log(`url=${actualURL}`, query, data);
         }
 
-        // 如果有指定的host，则使用指定的host
-        if (host && (actualURL.indexOf(host) < 0)) {
-            actualURL = `http://${host}${actualURL}`;
-        }
+        this.handleModalShow(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
-        ajax({
-            method: mockerItem.config.method,
-            url: actualURL,
-            data: query
-        })
-            .then((data) => {
-                if (process.env.NODE_ENV !== 'production') {
-                    console.log(`url=${actualURL}`, query, data);
-                }
+  handleActive = (name) => {
+    this.props.setMockerActiveModule(this.props.mockerItem.name, name);
+  };
 
-                this.handleModalShow(data);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    };
+  handleModalShow = (data) => {
+    this.setState({
+      modalShowData: data
+    });
+  };
 
-    handleActive = (name) => {
-        this.props.setMockerActiveModule(this.props.mockerItem.name, name);
-    };
+  handleModalHide = () => {
+    this.setState({
+      modalShowData: null
+    });
+  };
 
-    handleModalShow = (data) => {
-        this.setState({
-            modalShowData: data
-        });
-    };
+  handleDisable = () => {
+    this.props.setMockerDisable(this.props.mockerItem.name, !this.props.mockerItem.config.disable);
+  };
 
-    handleModalHide = () => {
-        this.setState({
-            modalShowData: null
-        });
-    };
+  render() {
+    const { isLoaded, mockerItem, readme } = this.props;
+    const { modalShowData } = this.state;
 
-    handleDisable = () => {
-        // console.log('handleDisable', this.props.mockerItem.disable);
-        this.props.setMockerDisable(this.props.mockerItem.name, !this.props.mockerItem.disable);
-    };
+    return (
+      <div className="mockers-mocker">
 
-    render() {
-        const { isLoaded, mockerItem, readme } = this.props;
-        const { modalShowData } = this.state;
+        <MockerBreadcrumb name={mockerItem.name} />
 
-        return (
-            <div className="mockers-mocker">
+        {
+          isLoaded ? (
+            <div>
+              <MockerSwitcher
+                isDisabled={mockerItem.config.disable}
+                previewResult={this.handlePreviewResult.bind(this, null)}
+                updateDisable={this.handleDisable}
+              />
 
-                <MockerBreadcrumb name={mockerItem.name} />
+              <MockerDetail
+                mockerItem={mockerItem}
+              />
 
-                {
-                    isLoaded ? (
-                        <div>
-                            <MockerSwitcher
-                                isDisabled={mockerItem.disable}
-                                previewResult={this.handlePreviewResult.bind(this, null)}
-                                updateDisable={this.handleDisable}
-                            />
+              <MockModuleList
+                isLoaded={isLoaded}
+                mockerItem={mockerItem}
+                previewResult={this.handlePreviewResult}
+                updateActive={this.handleActive}
+              />
 
-                            <MockerDetail
-                                mockerItem={mockerItem}
-                            />
+              <MockerShowResult
+                data={modalShowData}
+                onHide={this.handleModalHide}
+              />
 
-                            <MockModuleList
-                                isLoaded={isLoaded}
-                                mockerItem={mockerItem}
-                                previewResult={this.handlePreviewResult}
-                                updateActive={this.handleActive}
-                            />
+              {/*<MockerReadme htmlContent={readme} />*/}
 
-                            <MockerShowResult
-                                data={modalShowData}
-                                onHide={this.handleModalHide}
-                            />
-
-                            {/*<MockerReadme htmlContent={readme} />*/}
-
-                        </div>
-                    ) : (
-                        <div>加载中...</div>
-                    )
-                }
             </div>
-        );
-    }
+          ) : (
+            <div>加载中...</div>
+          )
+        }
+      </div>
+    );
+  }
 }
 
 function mapStateToProps(state) {
-    const { mockerInfo } = state;
+  const { mockerInfo } = state;
 
-    return {
-        isLoaded: mockerInfo.isLoaded,
-        mockerItem: mockerInfo.data,
-        readme: mockerInfo.readme
-    };
+  return {
+    isLoaded: mockerInfo.isLoaded,
+    mockerItem: mockerInfo.data,
+    readme: mockerInfo.readme
+  };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        loadMocker(mockerName) {
-            return dispatch(loadMocker(mockerName));
-        },
+  return {
+    loadMocker(mockerName) {
+      return dispatch(loadMocker(mockerName));
+    },
 
-        loadMockerReadme(mockerName) {
-            return dispatch(loadMockerReadme(mockerName));
-        },
+    loadMockerReadme(mockerName) {
+      return dispatch(loadMockerReadme(mockerName));
+    },
 
-        setMockerActiveModule(mockerName, mockModuleName) {
-            return dispatch(setMockerActiveModule(mockerName, mockModuleName));
-        },
+    setMockerActiveModule(mockerName, mockModuleName) {
+      return dispatch(setMockerActiveModule(mockerName, mockModuleName));
+    },
 
-        setMockerDisable(mockerName, value) {
-            return dispatch(setMockerDisable(mockerName, value));
-        }
-    };
+    setMockerDisable(mockerName, value) {
+      return dispatch(setMockerDisable(mockerName, value));
+    }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Mocker);
