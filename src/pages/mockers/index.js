@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
 
-import './index.css';
+import './index.less';
 
 export default class Topics extends Component {
     constructor(props, context) {
