@@ -6,25 +6,26 @@ import { NavLink } from 'react-router-dom';
 import './index.less';
 
 export default function MockerSwitcher(props) {
-    const { name } = props;
+  const { name, match } = props;
 
-    return (
-        <div className="mocker-breadcrumb">
+  let arr = match.url.split('/');
+  arr.pop();
 
-            <Breadcrumb>
-                <Breadcrumb.Item>
-                    <NavLink exact to="/"> 首页 </NavLink>
-                </Breadcrumb.Item>
+  const parentPath = arr.join('/');
 
-                <Breadcrumb.Item>
-                    <NavLink to="/mockers"> mocker 列表 </NavLink>
-                </Breadcrumb.Item>
+  return (
+    <div className="mocker-breadcrumb">
 
-                <Breadcrumb.Item>
-                    {name}
-                </Breadcrumb.Item>
-            </Breadcrumb>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <NavLink to={parentPath}> 列表 </NavLink>
+        </Breadcrumb.Item>
 
-        </div>
-    );
+        <Breadcrumb.Item>
+          {name}
+        </Breadcrumb.Item>
+      </Breadcrumb>
+
+    </div>
+  );
 }

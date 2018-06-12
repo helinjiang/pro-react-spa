@@ -84,13 +84,14 @@ class Mocker extends Component {
   };
 
   render() {
-    const { isLoaded, mockerItem, readme } = this.props;
+    const { isLoaded, mockerItem, readme, match } = this.props;
     const { modalShowData } = this.state;
+    console.log('=========', match);
 
     return (
       <div className="mockers-mocker">
 
-        <MockerBreadcrumb name={mockerItem.name} />
+        <MockerBreadcrumb name={mockerItem.name} match={match}/>
 
         {
           isLoaded ? (
