@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
-import configureStore from './store/configureStore';
+import createStore from './store';
 
 import App from './App';
 
 import './index.css';
 
-const store = configureStore(window.__initialState);
+const store = createStore(window.__initialState);
 
 function mapStateToProps(state) {
     return state;
