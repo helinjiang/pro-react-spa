@@ -1,36 +1,38 @@
 import React from 'react';
-import { Modal, Button } from 'antd';
+import { Button, Modal } from 'antd';
 
 import './index.less';
 
 export default function MockerShowResult(props) {
-  const { isShow, data, onHide } = props;
+    const { data, onHide } = props;
 
-  return (
-    <div className="mocker-show-result">
+    const isShow = !!data;
 
-      <Modal
-        title="结果"
-        visible={isShow}
-        onCancel={onHide}
-        onOk={onHide}
-        footer={[
-          <Button key="submit" type="primary" size="large" onClick={onHide}>
-            知道了
-          </Button>,
-        ]}
-      >
+    return (
+        <div className="mocker-show-result">
 
-        <textarea
-          name="cgidata"
-          id="cgidata"
-          style={{ width: '100%', minHeight: '600px' }}
-          value={JSON.stringify(data, null, 2)}
-          readOnly
-        />
+            <Modal
+                title="结果"
+                visible={isShow}
+                onCancel={onHide}
+                onOk={onHide}
+                footer={[
+                    <Button key="submit" type="primary" size="large" onClick={onHide}>
+                        知道了
+                    </Button>
+                ]}
+            >
 
-      </Modal>
+                <textarea
+                    name="cgidata"
+                    id="cgidata"
+                    style={{ width: '100%', minHeight: '600px' }}
+                    value={JSON.stringify(data, null, 2)}
+                    readOnly
+                />
 
-    </div>
-  );
+            </Modal>
+
+        </div>
+    );
 }

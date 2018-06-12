@@ -18,8 +18,7 @@ class Mocker extends Component {
         super(props, context);
 
         this.state = {
-            showModal: false,
-            modalShowData: {}
+            modalShowData: null
         };
     }
 
@@ -70,15 +69,13 @@ class Mocker extends Component {
 
     handleModalShow = (data) => {
         this.setState({
-            showModal: true,
             modalShowData: data
         });
     };
 
     handleModalHide = () => {
         this.setState({
-            showModal: false,
-            modalShowData: {}
+            modalShowData: null
         });
     };
 
@@ -89,7 +86,7 @@ class Mocker extends Component {
 
     render() {
         const { isLoaded, mockerItem, readme } = this.props;
-        const { showModal, modalShowData } = this.state;
+        const { modalShowData } = this.state;
 
         return (
             <div className="mockers-mocker">
@@ -117,7 +114,6 @@ class Mocker extends Component {
                             />
 
                             <MockerShowResult
-                                isShow={showModal}
                                 data={modalShowData}
                                 onHide={this.handleModalHide}
                             />
