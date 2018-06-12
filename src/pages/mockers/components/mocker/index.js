@@ -7,7 +7,7 @@ import { loadMocker, loadMockerReadme, setMockerActiveModule, setMockerDisable }
 import MockerBreadcrumb from './display-breadcrumb';
 import MockerDetail from './display-detail';
 import MockerShowResult from './display-show-result';
-import MockerSwitcher from './display-switcher';
+import MockerSwitcher from './display-action';
 import MockerMockModuleList from './display-mock-module-list';
 import MockerReadme from './display-readme';
 

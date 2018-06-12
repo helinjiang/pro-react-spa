@@ -10,7 +10,7 @@ export default function MockersContainer(props) {
     let { match } = props;
 
     return (
-        <div className="mockers">
+        <div className="page-mockers">
             <h2>Topics</h2>
             <ul>
                 <li>
