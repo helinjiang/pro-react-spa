@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import { Breadcrumb, Layout } from 'antd';
+
 import './index.less';
 
 export default class Home extends Component {
@@ -9,10 +11,17 @@ export default class Home extends Component {
 
     render() {
         return (
-            <div className="home">
-                <h2>Home</h2>
-                <p>这是首页</p>
-            </div>
+            <Layout className="page-home">
+                <Breadcrumb>
+                    <Breadcrumb.Item>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item>List</Breadcrumb.Item>
+                    <Breadcrumb.Item>App</Breadcrumb.Item>
+                </Breadcrumb>
+                <Layout.Content>
+                    <h2>HOME</h2>
+                    <p>hello</p>
+                </Layout.Content>
+            </Layout>
         );
     }
 }

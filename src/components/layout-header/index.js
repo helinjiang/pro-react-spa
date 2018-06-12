@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Layout, Menu } from 'antd';
-import './index.less';
+import { Link } from 'react-router-dom';
 
-const { Header } = Layout;
+import './index.less';
 
 class LayoutHeader extends Component {
 
@@ -12,17 +12,30 @@ class LayoutHeader extends Component {
 
     render() {
         return (
-            <Header className="layout-header header">
+            <Layout.Header className="layout-header header">
                 <Menu
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={['mocker']}
+                    defaultSelectedKeys={['home']}
                     style={{ lineHeight: '64px' }}
                 >
-                    <Menu.Item key="mocker">Mocker</Menu.Item>
-                    <Menu.Item key="2">nav 2</Menu.Item>
+                    <Menu.Item key="home">
+                        <Link to="/">Home</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="mockers">
+                        <Link to="/mockers">Mockers</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="about">
+                        <Link to="/about">About</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="topics">
+                        <Link to="/topics">Topics</Link>
+                    </Menu.Item>
                 </Menu>
-            </Header>
+            </Layout.Header>
         );
     }
 }
