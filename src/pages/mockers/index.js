@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { Button, Card, Col, Row } from 'antd';
-import { NavLink } from 'react-router-dom';
+import { Button } from 'antd';
 
 import { loadMockerList } from './data/data-mocker-list';
+import MockerListItem from './components/mocker-list-item';
 
 import './index.less';
 
@@ -49,7 +49,6 @@ class Mockers extends Component {
 
     render() {
         const { curTag } = this.state;
-        const { list } = this.props;
 
         const tagList = this.getAllTags();
         const filterList = this.getFilterList();
@@ -73,33 +72,11 @@ class Mockers extends Component {
                     {
                         filterList.map((item, index) => {
                             return (
-                                <Row key={index}>
-                                    <Col span={24}>
-                                        <Card title={`${index + 1}. ${item.name}`}>
-                                            <Button.Group>
-                                                {
-                                                    item.config.tags.map((tagName, tagIndex) => {
-                                                        return <Button
-                                                            key={tagIndex}
-                                                            className={tagName === curTag ? 'active' : ''}
-                                                            icon="tag"
-                                                            onClick={this.handleClickTag.bind(this, tagName)}>{tagName}</Button>;
-                                                    })
-                                                }
-                                            </Button.Group>
-                                            <div className="detail">
-                                                <p>{item.description}</p>
-                                                <p>{item._fullPath}</p>
-                                            </div>
-
-                                            <NavLink to={`/admin/mockers/mocker/${item.name}`}>
-                                                <Button type="primary"
-                                                        size="large"
-                                                        icon="tool">更多...</Button>
-                                            </NavLink>
-                                        </Card>
-                                    </Col>
-                                </Row>
+                                <MockerListItem key={index}
+                                                index={index}
+                                                mockerItem={item}
+                                                clickTag={this.handleClickTag}
+                                />
                             );
                         })
                     }
