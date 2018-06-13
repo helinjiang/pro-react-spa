@@ -23,9 +23,8 @@ class LayoutHeader extends Component {
 
         const map = {
             '/': 'home',
-            '/mockers': 'mockers',
-            '/about': 'about',
-            '/topics': 'topics'
+            '/matman-admin/dashboard': 'home',
+            '/matman-admin/mockers': 'mockers',
         };
 
         let newMenuId = map[curMenu.url];
