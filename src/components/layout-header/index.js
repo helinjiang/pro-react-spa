@@ -52,19 +52,11 @@ class LayoutHeader extends Component {
                     style={{ lineHeight: '64px' }}
                 >
                     <Menu.Item key="home">
-                        <NavLink exact to="/" isActive={this.handleIsActive}>Home</NavLink>
+                        <NavLink to="/matman-admin/dashboard" isActive={this.handleIsActive}>首页</NavLink>
                     </Menu.Item>
 
                     <Menu.Item key="mockers">
-                        <NavLink to="/mockers" isActive={this.handleIsActive}>Mockers</NavLink>
-                    </Menu.Item>
-
-                    <Menu.Item key="about">
-                        <NavLink to="/about" isActive={this.handleIsActive}>About</NavLink>
-                    </Menu.Item>
-
-                    <Menu.Item key="topics">
-                        <NavLink to="/topics" isActive={this.handleIsActive}>Topics</NavLink>
+                        <NavLink to="/matman-admin/mockers" isActive={this.handleIsActive}>数据模拟</NavLink>
                     </Menu.Item>
                 </Menu>
             </Layout.Header>

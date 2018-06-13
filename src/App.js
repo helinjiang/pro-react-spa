@@ -6,27 +6,25 @@ import { Layout } from 'antd';
 import LayoutHeader from './components/layout-header';
 
 import Home from './pages/home';
-import About from './pages/about';
-import Topics from './pages/topics';
 import Mockers from './pages/mockers';
 
 import './App.less';
 
 const App = () => (
-    <Router>
+  <Router>
 
-        <Layout className="matman-container">
+    <Layout className="matman-container">
 
-            <LayoutHeader />
+      <LayoutHeader />
 
-            <Route exact path="/" component={Home} />
-            <Route path="/about" component={About} />
-            <Route path="/topics" component={Topics} />
-            <Route path="/mockers" component={Mockers} />
+      <Layout.Content>
+        <Route exact path="/" component={Home} />
+        <Route path="/matman-admin/dashboard" component={Home} />
+        <Route path="/matman-admin/mockers" component={Mockers} />
+      </Layout.Content>
+    </Layout>
 
-        </Layout>
-
-    </Router>
+  </Router>
 );
 
 export default App;
