@@ -33,10 +33,12 @@ class Mocker extends Component {
     this.props.loadMockerReadme(mockerName);
   }
 
-  handlePreviewResult = (query, host) => {
+  handlePreviewResult = (query) => {
     const { mockerItem } = this.props;
 
     let actualURL = mockerItem.config.route;
+
+    let host;
 
     if (process.env.NODE_ENV !== 'production') {
       host = 'localhost:9527';
@@ -91,7 +93,7 @@ class Mocker extends Component {
     return (
       <div className="mockers-mocker">
 
-        <MockerBreadcrumb name={mockerItem.name} match={match}/>
+        <MockerBreadcrumb name={mockerItem.name} match={match} />
 
         {
           isLoaded ? (
