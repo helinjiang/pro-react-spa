@@ -10,6 +10,7 @@ import MockerDetail from './display-detail';
 import MockerShowResult from './display-show-result';
 import MockerSwitcher from './display-action';
 import MockModuleList from './display-mock-module-list';
+import MockerReadme from './display-readme';
 
 import './index.less';
 
@@ -29,7 +30,7 @@ class Mocker extends Component {
 
     // 加载这个 mocker 的信息
     this.props.loadMocker(mockerName);
-    // this.props.loadMockerReadme(mockerName);
+    this.props.loadMockerReadme(mockerName);
   }
 
   handlePreviewResult = (query, host) => {
@@ -86,7 +87,6 @@ class Mocker extends Component {
   render() {
     const { isLoaded, mockerItem, readme, match } = this.props;
     const { modalShowData } = this.state;
-    console.log('=========', match);
 
     return (
       <div className="mockers-mocker">
@@ -119,7 +119,7 @@ class Mocker extends Component {
                 onHide={this.handleModalHide}
               />
 
-              {/*<MockerReadme htmlContent={readme} />*/}
+              <MockerReadme htmlContent={readme} />
 
             </div>
           ) : (
